@@ -1,0 +1,13 @@
+<h1>Show Sensor type</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @sensor_type.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.sensor_type_path(@conn, :edit, @sensor_type) %></span>
+<span><%= link "Back", to: Routes.sensor_type_path(@conn, :index) %></span>

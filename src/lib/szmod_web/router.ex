@@ -16,7 +16,15 @@ defmodule SzmodWeb.Router do
   scope "/", SzmodWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    #get "/", PageController, :index
+
+    #get "/devices", DeviceController, :index
+
+    resources "/devices", DeviceController, only: [ :index, :show ]
+    resources "/sensor_types", SensorTypeController, only: [ :index, :show ]
+    resources "/sensors", SensorController, only: [ :index, :show ]
+    resources "/characteristic_types", CharacteristicTypeController, only: [ :index, :show ]
+
   end
 
   # Other scopes may use custom stacks.

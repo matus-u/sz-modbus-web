@@ -1,0 +1,28 @@
+<h1>Listing Characteristic types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Uuid</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for characteristic_type <- @characteristic_types do %>
+    <tr>
+      <td><%= characteristic_type.name %></td>
+      <td><%= characteristic_type.uuid %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.characteristic_type_path(@conn, :show, characteristic_type) %></span>
+        <span><%#= link "Edit", to: Routes.characteristic_type_path(@conn, :edit, characteristic_type) %></span>
+        <span><%#= link "Delete", to: Routes.characteristic_type_path(@conn, :delete, characteristic_type), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%#= link "New Characteristic type", to: Routes.characteristic_type_path(@conn, :new) %></span>

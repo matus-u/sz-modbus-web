@@ -1,0 +1,18 @@
+<h1>Show Characteristic type</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @characteristic_type.name %>
+  </li>
+
+  <li>
+    <strong>Uuid:</strong>
+    <%= @characteristic_type.uuid %>
+  </li>
+
+</ul>
+
+<span><%#= link "Edit", to: Routes.characteristic_type_path(@conn, :edit, @characteristic_type) %></span>
+<span><%= link "Back", to: Routes.characteristic_type_path(@conn, :index) %></span>

@@ -1,0 +1,5 @@
+<h1>Edit Characteristic type</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.characteristic_type_path(@conn, :update, @characteristic_type)) %>
+
+<span><%= link "Back", to: Routes.characteristic_type_path(@conn, :index) %></span>
