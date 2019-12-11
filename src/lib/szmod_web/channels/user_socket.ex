@@ -3,6 +3,7 @@ defmodule SzmodWeb.UserSocket do
 
   ## Channels
   # channel "room:*", SzmodWeb.RoomChannel
+  channel "device_room:*", SzmodWeb.DeviceRoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
