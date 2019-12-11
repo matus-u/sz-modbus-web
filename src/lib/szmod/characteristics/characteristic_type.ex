@@ -6,7 +6,6 @@ defmodule Szmod.Characteristics.CharacteristicType do
     field :name, :string
     field :uuid, :integer
 
-    timestamps()
   end
 
   @doc false

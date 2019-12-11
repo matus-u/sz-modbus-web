@@ -5,7 +5,6 @@ defmodule Szmod.Sensors.SensorType do
   schema "sensor_types" do
     field :name, :string
 
-    timestamps()
   end
 
   @doc false

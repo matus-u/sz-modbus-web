@@ -5,7 +5,6 @@ defmodule Szmod.Repo.Migrations.CreateSensorTypes do
     create table(:sensor_types) do
       add :name, :string
 
-      timestamps()
     end
 
     create unique_index(:sensor_types, [:name])
