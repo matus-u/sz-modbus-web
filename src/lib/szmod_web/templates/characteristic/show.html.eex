@@ -1,0 +1,18 @@
+<h1>Show Characteristic</h1>
+
+<ul>
+
+  <li>
+    <strong>Value:</strong>
+    <%= @characteristic.value %>
+  </li>
+
+  <li>
+    <strong>Unit:</strong>
+    <%= @characteristic.unit %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.characteristic_path(@conn, :edit, @characteristic) %></span>
+<span><%#= link "Back", to: Routes.characteristic_path(@conn, :index) %></span>

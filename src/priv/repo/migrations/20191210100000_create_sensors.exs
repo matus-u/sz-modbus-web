@@ -5,6 +5,7 @@ defmodule Szmod.Repo.Migrations.CreateSensors do
     create table(:sensors) do
       add :name, :string
       add :address, :string
+      add :enabled, :boolean, default: true, null: false
       add :sensor_type_id, references(:sensor_types, on_delete: :nothing), null: false
       add :device_id, references(:devices, on_delete: :nothing), null: false
 

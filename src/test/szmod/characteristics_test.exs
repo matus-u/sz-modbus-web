@@ -63,4 +63,65 @@ defmodule Szmod.CharacteristicsTest do
       assert %Ecto.Changeset{} = Characteristics.change_characteristic_type(characteristic_type)
     end
   end
+
+  describe "characteristics" do
+    alias Szmod.Characteristics.Characteristic
+
+    @valid_attrs %{unit: "some unit", value: 120.5}
+    @update_attrs %{unit: "some updated unit", value: 456.7}
+    @invalid_attrs %{unit: nil, value: nil}
+
+    def characteristic_fixture(attrs \\ %{}) do
+      {:ok, characteristic} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Characteristics.create_characteristic()
+
+      characteristic
+    end
+
+    test "list_characteristics/0 returns all characteristics" do
+      characteristic = characteristic_fixture()
+      assert Characteristics.list_characteristics() == [characteristic]
+    end
+
+    test "get_characteristic!/1 returns the characteristic with given id" do
+      characteristic = characteristic_fixture()
+      assert Characteristics.get_characteristic!(characteristic.id) == characteristic
+    end
+
+    test "create_characteristic/1 with valid data creates a characteristic" do
+      assert {:ok, %Characteristic{} = characteristic} = Characteristics.create_characteristic(@valid_attrs)
+      assert characteristic.unit == "some unit"
+      assert characteristic.value == 120.5
+    end
+
+    test "create_characteristic/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Characteristics.create_characteristic(@invalid_attrs)
+    end
+
+    test "update_characteristic/2 with valid data updates the characteristic" do
+      characteristic = characteristic_fixture()
+      assert {:ok, %Characteristic{} = characteristic} = Characteristics.update_characteristic(characteristic, @update_attrs)
+      assert characteristic.unit == "some updated unit"
+      assert characteristic.value == 456.7
+    end
+
+    test "update_characteristic/2 with invalid data returns error changeset" do
+      characteristic = characteristic_fixture()
+      assert {:error, %Ecto.Changeset{}} = Characteristics.update_characteristic(characteristic, @invalid_attrs)
+      assert characteristic == Characteristics.get_characteristic!(characteristic.id)
+    end
+
+    test "delete_characteristic/1 deletes the characteristic" do
+      characteristic = characteristic_fixture()
+      assert {:ok, %Characteristic{}} = Characteristics.delete_characteristic(characteristic)
+      assert_raise Ecto.NoResultsError, fn -> Characteristics.get_characteristic!(characteristic.id) end
+    end
+
+    test "change_characteristic/1 returns a characteristic changeset" do
+      characteristic = characteristic_fixture()
+      assert %Ecto.Changeset{} = Characteristics.change_characteristic(characteristic)
+    end
+  end
 end

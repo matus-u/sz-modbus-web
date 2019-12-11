@@ -101,4 +101,100 @@ defmodule Szmod.Characteristics do
   def change_characteristic_type(%CharacteristicType{} = characteristic_type) do
     CharacteristicType.changeset(characteristic_type, %{})
   end
+
+  alias Szmod.Characteristics.Characteristic
+
+  @doc """
+  Returns the list of characteristics.
+
+  ## Examples
+
+      iex> list_characteristics()
+      [%Characteristic{}, ...]
+
+  """
+  def list_characteristics do
+    Repo.all(Characteristic)
+  end
+
+  @doc """
+  Gets a single characteristic.
+
+  Raises `Ecto.NoResultsError` if the Characteristic does not exist.
+
+  ## Examples
+
+      iex> get_characteristic!(123)
+      %Characteristic{}
+
+      iex> get_characteristic!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_characteristic!(id), do: Repo.get!(Characteristic, id)
+
+  @doc """
+  Creates a characteristic.
+
+  ## Examples
+
+      iex> create_characteristic(%{field: value})
+      {:ok, %Characteristic{}}
+
+      iex> create_characteristic(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_characteristic(attrs \\ %{}) do
+    %Characteristic{}
+    |> Characteristic.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a characteristic.
+
+  ## Examples
+
+      iex> update_characteristic(characteristic, %{field: new_value})
+      {:ok, %Characteristic{}}
+
+      iex> update_characteristic(characteristic, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_characteristic(%Characteristic{} = characteristic, attrs) do
+    characteristic
+    |> Characteristic.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Characteristic.
+
+  ## Examples
+
+      iex> delete_characteristic(characteristic)
+      {:ok, %Characteristic{}}
+
+      iex> delete_characteristic(characteristic)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_characteristic(%Characteristic{} = characteristic) do
+    Repo.delete(characteristic)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking characteristic changes.
+
+  ## Examples
+
+      iex> change_characteristic(characteristic)
+      %Ecto.Changeset{source: %Characteristic{}}
+
+  """
+  def change_characteristic(%Characteristic{} = characteristic) do
+    Characteristic.changeset(characteristic, %{})
+  end
 end

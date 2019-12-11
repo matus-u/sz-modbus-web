@@ -1,0 +1,28 @@
+<h1>Listing Characteristics</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Unit</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for characteristic <- @characteristics do %>
+    <tr>
+      <td><%= characteristic.value %></td>
+      <td><%= characteristic.unit %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.characteristic_path(@conn, :show, characteristic) %></span>
+        <span><%#= link "Edit", to: Routes.characteristic_path(@conn, :edit, characteristic) %></span>
+        <span><%#= link "Delete", to: Routes.characteristic_path(@conn, :delete, characteristic), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%#= link "New Characteristic", to: Routes.characteristic_path(@conn, :new) %></span>

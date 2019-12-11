@@ -24,6 +24,7 @@ defmodule SzmodWeb.Router do
     resources "/sensor_types", SensorTypeController, only: [ :index, :show ]
     resources "/sensors", SensorController, only: [ :index, :show ]
     resources "/characteristic_types", CharacteristicTypeController, only: [ :index, :show ]
+    resources "/characteristics", CharacteristicController, only: [ :index, :show ]
 
   end
 
