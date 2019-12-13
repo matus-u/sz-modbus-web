@@ -6,6 +6,9 @@ defmodule SzmodWeb.DeviceRoomChannel do
   alias Szmod.Sensors
   alias Szmod.Sensors.Sensor
   alias Szmod.Sensors.SensorType
+  alias Szmod.Characteristics.Characteristic
+  alias Szmod.Characteristics.CharacteristicType
+
   alias Szmod.Repo
 
   def join("device_room:" <> id, payload, socket) do
@@ -41,18 +44,26 @@ defmodule SzmodWeb.DeviceRoomChannel do
     end
   end
 
-  def handle_sensors(device, %{"Name" => name, "DevType" => sType, "Address" => address, "Id" => id, "LiveData" => live_data}) do
-        IO.puts "#{name} --> #{sType} --> #{id} --> #{address}"
-        {:ok, sensor} = update_or_create_sensor(device, id, name, address, sType)
-        for %{"name" => charName, "charType" => charType, "unit" => charUnit, "value" => charValue} <- live_data do
-            IO.puts "#{charName} --> #{charType} --> #{charUnit} --> #{charValue}"
+  def handle_characteristic(sensor, %{"charType" => charType, "unit" => charUnit, "value" => charValue}) do
+        with {floatValue, _} <- Float.parse(charValue)
+        do
+            charTypeObj = Repo.get_by!(CharacteristicType, uuid: charType)
+            %Characteristic{}
+            |> Characteristic.changeset(%{value: floatValue, unit: charUnit})
+            |> Ecto.Changeset.put_assoc(:characteristic_type, charTypeObj )
+            |> Ecto.Changeset.put_assoc(:sensor, sensor)
+            |> Repo.insert()
         end
+  end
+
+  def handle_sensors(device, %{"Name" => name, "DevType" => sType, "Address" => address, "Id" => id, "LiveData" => live_data}) do
+        #IO.puts "#{name} --> #{sType} --> #{id} --> #{address}"
+        {:ok, sensor} = update_or_create_sensor(device, id, name, address, sType)
+        Enum.each(live_data, fn charac -> handle_characteristic(sensor, charac) end)
   end
 
 
   def handle_in("data-message", %{"id" => dev_id, "name" => dev_name, "data" => data}, socket) do
-    IO.puts dev_id
-    IO.puts dev_name
     {:ok, dev } = update_or_create_device(dev_id, dev_name)
     Enum.each(data, fn sensor -> handle_sensors(dev, sensor) end)
 
