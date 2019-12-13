@@ -21,8 +21,8 @@ defmodule Szmod.Sensors.Sensor do
   @doc false
   def changeset(sensor, attrs) do
     sensor
-    |> cast(attrs, [:name, :address, :enabled])
-    |> validate_required([:name, :address, :device, :sensor_type])
+    |> cast(attrs, [:uuid, :name, :address, :enabled])
+    |> validate_required([:uuid, :name, :address])
     |> unique_constraint(:uuid)
   end
 end

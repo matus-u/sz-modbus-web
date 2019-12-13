@@ -3,9 +3,9 @@ defmodule SzmodWeb.DeviceRoomChannel do
 
   alias Szmod.App
   alias Szmod.App.Device
+  alias Szmod.Sensors
   alias Szmod.Sensors.Sensor
   alias Szmod.Sensors.SensorType
-  alias Szmod.Sensors.Characteristic
   alias Szmod.Repo
 
   def join("device_room:" <> id, payload, socket) do
@@ -21,21 +21,29 @@ defmodule SzmodWeb.DeviceRoomChannel do
   def update_or_create_device(id, name) do
     case Repo.get_by(Device, uuid: id) do
         device when is_map(device) ->
-            with {:ok, %Device{} = device} <- App.update_device(device, %{name: name}) do
-            device
-            end
+            App.update_device(device, %{name: name})
         nil ->
-            with {:ok, %Device{} = device} <- App.create_device(%{name: name, uuid: id}) do
-            device
-            end
+            App.create_device(%{name: name, uuid: id})
     end
   end
 
-  def update_or_create_sensor(id, name, address, sensorType) do
+  def update_or_create_sensor(device, id, name, address, sensorType) do
+    case Repo.get_by(Sensor, uuid: id) do
+        sensor when is_map(sensor) ->
+            Sensors.update_sensor(sensor, %{name: name, address: address})
+        nil ->
+            sensorTypeObj = Repo.get_by!(SensorType, name: sensorType)
+            %Sensor{}
+            |> Sensor.changeset(%{uuid: id, address: address, name: name, enabled: true})
+            |> Ecto.Changeset.put_assoc(:device, device )
+            |> Ecto.Changeset.put_assoc(:sensor_type, sensorTypeObj)
+            |> Repo.insert()
+    end
   end
 
   def handle_sensors(device, %{"Name" => name, "DevType" => sType, "Address" => address, "Id" => id, "LiveData" => live_data}) do
         IO.puts "#{name} --> #{sType} --> #{id} --> #{address}"
+        {:ok, sensor} = update_or_create_sensor(device, id, name, address, sType)
         for %{"name" => charName, "charType" => charType, "unit" => charUnit, "value" => charValue} <- live_data do
             IO.puts "#{charName} --> #{charType} --> #{charUnit} --> #{charValue}"
         end
@@ -45,7 +53,7 @@ defmodule SzmodWeb.DeviceRoomChannel do
   def handle_in("data-message", %{"id" => dev_id, "name" => dev_name, "data" => data}, socket) do
     IO.puts dev_id
     IO.puts dev_name
-    dev = update_or_create_device(dev_id, dev_name)
+    {:ok, dev } = update_or_create_device(dev_id, dev_name)
     Enum.each(data, fn sensor -> handle_sensors(dev, sensor) end)
 
     {:reply, {:ok, %{msg_type: "data-message"}}, socket}
