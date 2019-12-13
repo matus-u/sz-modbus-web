@@ -1,11 +1,12 @@
 defmodule Szmod.App.Device do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Szmod.Sensors.Sensor
 
   schema "devices" do
     field :name, :string
     field :uuid, :string
-    has_many :sensors, Sensors.Sensor
+    has_many :sensors, Sensor
 
     timestamps()
   end

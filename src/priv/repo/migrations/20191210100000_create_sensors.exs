@@ -3,6 +3,7 @@ defmodule Szmod.Repo.Migrations.CreateSensors do
 
   def change do
     create table(:sensors) do
+      add :uuid, :string, null: false
       add :name, :string
       add :address, :string
       add :enabled, :boolean, default: true, null: false
@@ -14,5 +15,6 @@ defmodule Szmod.Repo.Migrations.CreateSensors do
 
     create index(:sensors, [:sensor_type_id])
     create index(:sensors, [:device_id])
+    create unique_index(:sensors, [:uuid])
   end
 end

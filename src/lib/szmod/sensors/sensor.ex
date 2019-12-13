@@ -7,6 +7,7 @@ defmodule Szmod.Sensors.Sensor do
   alias Szmod.Characteristics.Characteristic
 
   schema "sensors" do
+    field :uuid, :string
     field :address, :string
     field :name, :string
     field :enabled, :boolean
@@ -22,5 +23,6 @@ defmodule Szmod.Sensors.Sensor do
     sensor
     |> cast(attrs, [:name, :address, :enabled])
     |> validate_required([:name, :address, :device, :sensor_type])
+    |> unique_constraint(:uuid)
   end
 end
