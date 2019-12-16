@@ -32,7 +32,7 @@ defmodule SzmodWeb.SensorController do
     sensor = Sensors.get_sensor!(id) |> Szmod.Repo.preload([:device, :sensor_type]) |> Szmod.Repo.preload([characteristics: (from ch in Szmod.Characteristics.Characteristic, distinct: ch.characteristic_type_id)])
 
     chars = Enum.map(sensor.characteristics,
-        fn x -> Szmod.Characteristics.Characteristic |> where([c], c.characteristic_type_id == ^x.characteristic_type_id and c.sensor_id == ^id) |>  order_by(:inserted_at) |> limit(10) |> Szmod.Repo.all  |> Szmod.Repo.preload(:characteristic_type) end)
+        fn x -> Szmod.Characteristics.Characteristic |> where([c], c.characteristic_type_id == ^x.characteristic_type_id and c.sensor_id == ^id) |>  order_by(desc: :inserted_at) |> limit(10) |> Szmod.Repo.all  |> Szmod.Repo.preload(:characteristic_type) end)
 
     render(conn, "show.html", sensor: sensor, chars: chars)
   end
