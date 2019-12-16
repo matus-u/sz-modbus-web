@@ -1,5 +1,6 @@
 defmodule SzmodWeb.SensorController do
   use SzmodWeb, :controller
+  import Ecto.Query
 
   alias Szmod.Sensors
   alias Szmod.Sensors.Sensor
@@ -27,8 +28,13 @@ defmodule SzmodWeb.SensorController do
   end
 
   def show(conn, %{"id" => id}) do
-    sensor = Sensors.get_sensor!(id)
-    render(conn, "show.html", sensor: sensor)
+
+    sensor = Sensors.get_sensor!(id) |> Szmod.Repo.preload([:device, :sensor_type]) |> Szmod.Repo.preload([characteristics: (from ch in Szmod.Characteristics.Characteristic, distinct: ch.characteristic_type_id)])
+
+    chars = Enum.map(sensor.characteristics,
+        fn x -> Szmod.Characteristics.Characteristic |> where([c], c.characteristic_type_id == ^x.characteristic_type_id and c.sensor_id == ^id) |>  order_by(:inserted_at) |> limit(10) |> Szmod.Repo.all  |> Szmod.Repo.preload(:characteristic_type) end)
+
+    render(conn, "show.html", sensor: sensor, chars: chars)
   end
 
   def edit(conn, %{"id" => id}) do

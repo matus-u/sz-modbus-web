@@ -1,18 +1,39 @@
-<h1>Show Device</h1>
+<h1><%= @device.name %></h1>
 
-<ul>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @device.name %>
-  </li>
 
-  <li>
-    <strong>Uuid:</strong>
-    <%= @device.uuid %>
-  </li>
+<div>
+<table>
+  <thead>
+    <tr>
+        <th> <strong>Sensors </strong> </th>
+        <th> <strong>Address </strong> </th>
+        <th> <strong>Sensor type </strong> </th>
+        <th> <strong>Actual values </strong> </th>
 
-</ul>
+    </tr>
+  </thead>
+  <tbody>
+<%= for sensor <- @device.sensors do %>
+    <tr>
+      <td><%= sensor.name %></td>
+      <td><%= sensor.address %></td>
+      <td><%= sensor.sensor_type.name %></td>
+      <td>
+        <span><%= link "Show", to: Routes.sensor_path(@conn, :show, sensor) %></span>
+      </td>
+    </tr>
+<% end %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>All</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 <span><%#= link "Edit", to: Routes.device_path(@conn, :edit, @device) %></span>
 <span><%= link "Back", to: Routes.device_path(@conn, :index) %></span>

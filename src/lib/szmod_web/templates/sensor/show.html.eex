@@ -1,18 +1,26 @@
-<h1>Show Sensor</h1>
+<h1>Sensor: <%= @sensor.name %></h1>
 
-<ul>
+    <%= for char_list <- @chars do %>
+        <strong> <%= Enum.at(char_list,0).characteristic_type.name %></strong>
+        <table>
+          <thead>
+            <tr>
+              <th>Value</th>
+              <th>Unit</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+            <%= for char <- char_list do %>
+            <tr>
+              <td><%= char.value %></td>
+              <td><%= char.unit %></td>
+              <td><%= char.inserted_at %></td>
+            </tr>
+           <% end %>
+        </table>
+    <% end %>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @sensor.name %>
-  </li>
 
-  <li>
-    <strong>Address:</strong>
-    <%= @sensor.address %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: Routes.sensor_path(@conn, :edit, @sensor) %></span>
-<span><%#= link "Back", to: Routes.sensor_path(@conn, :index) %></span>
+<span><%#= link "Edit", to: Routes.sensor_path(@conn, :edit, @sensor) %></span>
+<span><%= link "Back", to: Routes.device_path(@conn, :show, @sensor.device) %></span>

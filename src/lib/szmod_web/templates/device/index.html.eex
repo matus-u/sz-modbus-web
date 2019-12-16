@@ -1,10 +1,10 @@
-<h1>Listing Devices</h1>
+<h1>Measured places:</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Uuid</th>
+      <th></th>
+      <th></th>
 
       <th></th>
     </tr>
@@ -13,7 +13,6 @@
 <%= for device <- @devices do %>
     <tr>
       <td><%= device.name %></td>
-      <td><%= device.uuid %></td>
 
       <td>
         <span><%= link "Show", to: Routes.device_path(@conn, :show, device) %></span>

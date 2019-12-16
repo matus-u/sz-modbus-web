@@ -27,7 +27,7 @@ defmodule SzmodWeb.DeviceController do
   end
 
   def show(conn, %{"id" => id}) do
-    device = App.get_device!(id)
+    device = App.get_device!(id) |> Szmod.Repo.preload(:sensors) |> Szmod.Repo.preload(sensors: :sensor_type)
     render(conn, "show.html", device: device)
   end
 
